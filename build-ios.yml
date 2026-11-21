@@ -1,46 +1,24 @@
-# Builds an UNSIGNED .ipa on GitHub's free macOS runner (no Mac needed).
-# The .ipa is then signed and installed on the iPhone from Windows with Sideloadly.
-# See INSTALL_GUIDE.md, Option B.
-name: Build iOS app (unsigned IPA)
+name: HciCursorStudy
+options:
+  bundleIdPrefix: com.hcicursorstudy
+  deploymentTarget:
+    iOS: "16.0"
 
-on:
-  workflow_dispatch:   # "Run workflow" button in the Actions tab
-  push:
-    branches: [main]
-
-jobs:
-  build:
-    runs-on: macos-14
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Install XcodeGen
-        run: brew install xcodegen
-
-      - name: Generate Xcode project
-        run: xcodegen
-
-      - name: Build (no code signing)
-        run: |
-          xcodebuild \
-            -project HciCursorStudy.xcodeproj \
-            -target HciCursorStudy \
-            -configuration Release \
-            -sdk iphoneos \
-            SYMROOT="$PWD/build" \
-            CODE_SIGNING_ALLOWED=NO \
-            CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGN_IDENTITY="" \
-            build
-
-      - name: Package IPA
-        run: |
-          mkdir -p Payload
-          cp -R build/Release-iphoneos/HciCursorStudy.app Payload/
-          zip -qr HciCursorStudy-unsigned.ipa Payload
-
-      - name: Upload IPA
-        uses: actions/upload-artifact@v4
-        with:
-          name: HciCursorStudy-ipa
-          path: HciCursorStudy-unsigned.ipa
+targets:
+  HciCursorStudy:
+    type: application
+    platform: iOS
+    sources:
+      - path: .
+        excludes:
+          - "*.yml"
+          - "*.yaml"
+          - "*.md"
+          - ".github/**"
+    settings:
+      base:
+        INFOPLIST_FILE: Info.plist
+        PRODUCT_BUNDLE_IDENTIFIER: com.hcicursorstudy.app
+        GENERATE_INFOPLIST_FILE: NO
+        CURRENT_PROJECT_VERSION: 1
+        MARKETING_VERSION: 1.0
