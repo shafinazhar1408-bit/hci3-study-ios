@@ -1,0 +1,22 @@
+# XcodeGen 설정 파일 — Mac 터미널에서 `xcodegen` 을 실행하면 HciCursorStudy.xcodeproj 가 만들어집니다.
+name: HciCursorStudy
+options:
+  bundleIdPrefix: com.example
+  deploymentTarget:
+    iOS: "15.0"
+targets:
+  HciCursorStudy:
+    type: application
+    platform: iOS
+    sources:
+      - path: HciCursorStudy
+        excludes:
+          - Info.plist
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.example.hcicursorstudy.ios.v2
+        INFOPLIST_FILE: HciCursorStudy/Info.plist
+        TARGETED_DEVICE_FAMILY: "1"
+        SWIFT_VERSION: "5.0"
+        GENERATE_INFOPLIST_FILE: NO
+        CODE_SIGN_STYLE: Automatic
